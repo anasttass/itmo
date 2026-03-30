@@ -1,0 +1,94 @@
+[
+  {
+    "id": 1,
+    "name": "Test Lab",
+    "coordinates": {
+      "x": 100,
+      "y": 200
+    },
+    "creationDate": "24.10.2006",
+    "minimalPoint": 50,
+    "difficulty": "VERY_EASY",
+    "author": {
+      "name": "admin",
+      "birthday": "2006-10-24T00:00:00+03:00",
+      "eyeColor": "BLUE",
+      "hairColor": "BLACK",
+      "nationality": "RUSSIA",
+      "location": {
+        "x": 10.5,
+        "y": 20.5,
+        "z": 30.5
+      }
+    }
+  },
+  {
+    "id": 2,
+    "name": "Informatics",
+    "coordinates": {
+      "x": 250,
+      "y": 100
+    },
+    "creationDate": "25.11.2025",
+    "minimalPoint": 20,
+    "difficulty": "IMPOSSIBLE",
+    "author": {
+      "name": "admin",
+      "birthday": "2006-10-24T00:00:00+03:00",
+      "eyeColor": "BLUE",
+      "hairColor": "BLACK",
+      "nationality": "RUSSIA",
+      "location": {
+        "x": 10.5,
+        "y": 20.5,
+        "z": 30.5
+      }
+    }
+  },
+  {
+    "id": 3,
+    "name": "programming",
+    "coordinates": {
+      "x": 1,
+      "y": 2
+    },
+    "creationDate": "10.12.2025",
+    "minimalPoint": 90,
+    "difficulty": "TERRIBLE",
+    "author": {
+      "name": "admin",
+      "birthday": "2006-10-24T00:00:00+04:00[Europe/Moscow]",
+      "eyeColor": "GREEN",
+      "hairColor": "RED",
+      "nationality": "RUSSIA",
+      "location": {
+        "x": 50.0,
+        "y": 34.0,
+        "z": 22.0
+      }
+    }
+  },
+  {
+    "id": 4,
+    "name": "prog 5",
+    "coordinates": {
+      "x": 4,
+      "y": 65
+    },
+    "creationDate": "10.12.2025",
+    "minimalPoint": 30,
+    "difficulty": "VERY_EASY",
+    "author": {
+      "name": "admin",
+      "birthday": "2006-10-24T00:00:00+04:00[Europe/Moscow]",
+      "eyeColor": "BLACK",
+      "hairColor": "BLACK",
+      "nationality": "GERMANY",
+      "location": {
+        "x": 1.5,
+        "y": 20.0,
+        "z": 3.0
+      }
+    }
+  }
+]
