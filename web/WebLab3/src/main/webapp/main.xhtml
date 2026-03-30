@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Основная страница</title>
+    <link href="css/style.css" rel="stylesheet" />
+</h:head>
+<h:body>
+    <div class="card">
+        <h2>Проверка попадания точки в область</h2>
+        <table class="maintable">
+            <tr>
+                <td width="50%" valign="top">
+
+                    <h:form id="mainForm">
+
+                        <h:outputLabel for="x" value="Выберите X:" />
+                        <p:slider id="x" for="xInput" value="#{mainBean.x}" minValue="-4" maxValue="4" step="1"
+                        style="width: 100%" />
+                        <h:inputHidden id="xInput" value="#{mainBean.x}" />
+                        <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 5px; font-size: 12px;">
+                            <span>-4</span>
+                            <span>-3</span>
+                            <span>-2</span>
+                            <span>-1</span>
+                            <span>0</span>
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
+                            <span>4</span>
+                        </div>
+
+                        <br/>
+
+                        <h:outputLabel for="y" value="Введите Y(-5;5):" />
+                        <h:inputText id="y" value="#{mainBean.y}" validatorMessage="Y не попадает в диапазон от -5 до 5" converterMessage="Y должен быть числом">
+                            <f:validateDoubleRange minimum="-5" maximum="5" />
+                        </h:inputText>
+                        <!--<h:message for="y" style="color:#ff8888;"/> -->
+
+                        <br/>
+
+                        <h:outputLabel for="r" value="Выберите R:" />
+                        <p:spinner id="r" value="#{mainBean.r}" min="1" max="3" stepFactor="0.5" />
+
+                        <br/>
+                        <!--основная кнопка-->
+                        <p:commandButton id="checkBtn" value="ПРОВЕРИТЬ"
+                        action="#{mainBean.checkPoint}" 
+                        update=":historyTable :mainForm:messages"
+                        process="@this :mainForm:xInput :mainForm:y :mainForm:r"
+                        oncomplete="initClickEvents(); updateAllPoints(); convertAllTableTimes();" />
+
+                        <!--скрытая кнопка-->
+                        <h:inputHidden id="xHidden" value="#{mainBean.x}" />
+                        <h:inputHidden id="yHidden" value="#{mainBean.y}" />
+                        <p:commandButton id="clickSubmit" style="display:none" 
+                        action="#{mainBean.checkPointFromClick}" 
+                        process="@form" 
+                        update=":historyTable mainForm:messages"
+                        oncomplete="initClickEvents(); updateAllPoints(); convertAllTableTimes();" />
+
+                        <!--очистка истории-->
+                        <p:commandButton id="clHsBtm" value="ОЧИСТИТЬ ИСТОРИЮ"
+                        action="#{mainBean.clearHistory}" 
+                        update=":historyTable :mainForm:messages"
+                        oncomplete="initClickEvents(); updateAllPoints();" />
+
+                        <h:messages id="messages"/>
+
+                    </h:form>
+                </td>
+
+                <td width="50%" align="center" valign="top">
+                    <h:panelGroup id="areaPanel">
+                        <div class="card">
+                            Координатная плоскость
+                            <svg id="plane-canvas" viewBox="0 0 512 384"
+                                xmlns="http://www.w3.org/2000/svg">
+
+                                <g id="plane-areas" fill="rgba(0,150,255,0.3)" stroke="#70d6ff" stroke-width="1">
+                                    <!--треугольник 0,0 0,R/2 R,0-->
+                                    <polygon points="256,192 320,192 256,160" />
+                                    <!--круг R четвертая четверть-->
+                                    <path d="M256,192 L320,192 A64,64 0 0,1 256,256 Z" />
+                                    <!--квадрат -R,0 0,-R-->
+                                    <rect x="192" y="192" width="64" height="64" />
+                                </g>
+
+                                <g stroke="#fff" stroke-width="1">
+                                    <line x1="0" y1="192" x2="512" y2="192" />
+                                    <line x1="256" y1="0" x2="256" y2="384" />
+                                    <text x="500" y="182" fill="#fff">x</text>
+                                    <text x="264" y="12" fill="#fff">y</text>
+                                </g>
+
+                                <g fill="#fff" font-size="12" text-anchor="middle">
+                                    <text x="192" y="182">-R</text>
+                                    <text x="224" y="182">-R/2</text>
+                                    <text x="288" y="182">R/2</text>
+                                    <text x="320" y="182">R</text>
+                                    <text x="264" y="128">R</text>
+                                    <text x="264" y="160">R/2</text>
+                                    <text x="264" y="224">-R/2</text>
+                                    <text x="264" y="256">-R</text>
+                                </g>
+                            </svg>
+                        </div>
+                    </h:panelGroup>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="card">
+                        <h2 class="history-title">История результатов</h2>
+                        <h:dataTable id="historyTable" value="#{mainBean.results}" var="point"
+                        styleClass="history">
+                        
+                        <h:column>
+                            <f:facet name="header">X</f:facet>
+                            #{point.x}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Y</f:facet>
+                            #{point.y}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">R</f:facet>
+                            #{point.r}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Попадание</f:facet>
+                            <h:outputText value="#{point.hit ? 'Попадает':'Мимо'}"
+                            style="#{point.hit ? 'color:#00ff88' : 'color:#ff4444'}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Время</f:facet>
+                            <span class="time-value">#{point.time}</span>
+                        </h:column>
+                    </h:dataTable>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="card">
+                        <p class="back-text">Чтобы перейти на начальную страницу, нажмите кнопку</p>
+                        <h:button  value="PUSH" outcome="toStart" styleClass="back-button" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+<script src="js/main.js"></script>
+</h:body>
+</html>

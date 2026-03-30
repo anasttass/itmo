@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Проверка точки</title>
+
+    <style>
+        body { margin:0; background:#f5f6fa; font-family: Arial }
+        #header { color:green; font-size:25px; font-family: monospace; padding:12px }
+        .container { max-width:1000px; margin:auto; padding:20px }
+        .form-area { background:#bcd9f2; padding:16px; border-radius:6px; margin-bottom:20px }
+        .results-area { background:white; padding:16px; border-radius:6px }
+        .results-table { width:100%; border-collapse: collapse; }
+        .results-table th, .results-table td { border:1px solid #aaa; padding:6px; text-align:center; }
+        #resultsContainer { max-height:300px; overflow-y:auto; }
+        .btn { padding:8px 14px; border-radius:20px; border:2px solid black; background:white }
+        .btn:hover { background: lightpink }
+        .error { color:#b00020; font-size:14px }
+
+        .y-links a {
+            display:inline-block;
+            padding:6px 10px;
+            margin:3px;
+            border:1px solid #888;
+            border-radius:4px;
+            text-decoration:none;
+            color:black;
+        }
+        .y-links a.selected {
+            background:#3b82f6;
+            color:white;
+        }
+    </style>
+</h:head>
+
+<h:body>
+
+    <header id="header">Рутман Р. И., P3231, вариант 8576</header>
+
+    <main class="container">
+
+        <h:form id="mainForm">
+            <h:outputText value="PointBean X: #{pointBean.x}" />
+            <h:outputText value="PointBean Y: #{pointBean.y}" />
+            <h:outputText value="PointBean R: #{pointBean.r}" />
+            <h:outputText value="Y Values: #{not empty pointBean.yv}" />
+
+
+            <!-- hidden для JS -->
+            <h:inputHidden id="xHidden" value="#{pointBean.x}" required="true"/>
+            <h:inputHidden id="yHidden" value="#{pointBean.y}" required="true"/>
+            <h:inputHidden id="rHidden" value="#{pointBean.r}" required="true"/>
+
+            <section class="form-area">
+                <h2>Параметры точки</h2>
+
+                <!-- X -->
+                <label>X (-5..5)</label><br/>
+                <h:inputText id="xInput" value="#{pointBean.x}" required="true">
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
+                </h:inputText>
+                <h:message for="xInput" styleClass="error"/>
+
+                <!-- Y -->
+                <div style="margin-top:12px">
+                    <label>Y</label><br/>
+                    <div class="y-links">
+                        <ui:repeat value="#{pointBean.yv}" var="v">
+                        <p:commandLink value="#{v}"
+                                           action="#{pointBean.selectY(v)}"
+                                           process="@this"
+                                           update="@form"
+                                           styleClass="#{pointBean.selectedY(v) ? 'selected' : ''}"/>
+                        </ui:repeat>
+                    </div>
+                    <h:message for="yHidden" styleClass="error"/>
+                </div>
+
+                <!-- R -->
+                <div style="margin-top:12px">
+                    <label>R</label><br/>
+                    <p:spinner id="rSpinner" value="#{pointBean.r}"
+                               min="0.1" max="3" step="0.1"/>
+                </div>
+
+                <br/>
+
+                <p:commandButton value="Проверить"
+                                 action="#{pointBean.checkPoint}"
+                                 process="@form"
+                                 update="resultsTable planeWrapper"
+                                 oncomplete="redrawHistoryPoints()"
+                                 styleClass="btn"/>
+
+                <p:commandButton value="Очистить"
+                                 action="#{historyBean.clear}"
+                                 process="@this"
+                                 update="resultsTable planeWrapper"
+                                 oncomplete="redrawHistoryPoints()"
+                                 styleClass="btn"
+                                 immediate="true"/>
+
+                <h:button value="Вернуться на стартовую страницу" outcome="toIndex" styleClass="btn"/>
+
+                <p:remoteCommand name="submitPointFromGraph"
+                                 action="#{pointBean.checkPoint}"
+                                 process="xHidden yHidden rHidden"
+                                 update="resultsTable planeWrapper"/>
+            </section>
+
+            <!-- График -->
+            <section class="form-area">
+                <h2>График</h2>
+
+                <h:panelGroup id="planeWrapper">
+                    <svg id="plane-canvas" width="400" height="400"
+                         viewBox="-200 -200 400 400"
+                         xmlns="http://www.w3.org/2000/svg">
+
+                        <line x1="-180" y1="0" x2="180" y2="0" stroke="black"/>
+                        <line x1="0" y1="-180" x2="0" y2="180" stroke="black"/>
+
+                        <rect id="rect-area" x="0" y="-128"
+                              width="64" height="128"
+                              fill="#4da3ff" opacity="0.5"/>
+
+                        <polygon id="triangle-area"
+                                 points="-64,0 0,0 0,128"
+                                 fill="#4da3ff" opacity="0.5"/>
+
+                        <path id="circle-area"
+                              d="M0,0 L0,64 A64,64 0 0,0 64,0 Z"
+                              fill="#4da3ff" opacity="0.5"/>
+                    </svg>
+                </h:panelGroup>
+            </section>
+
+            <!-- Таблица -->
+            <section class="results-area">
+                <h2>Результаты</h2>
+                <div id = "resultsContainer">
+                    <h:dataTable id="resultsTable"
+                                 value="#{historyBean.results}" var="r"
+                                 styleClass="results-table">
+
+                        <h:column><f:facet name="header">X</f:facet>#{r.x}</h:column>
+                        <h:column><f:facet name="header">Y</f:facet>#{r.y}</h:column>
+                        <h:column><f:facet name="header">R</f:facet>#{r.r}</h:column>
+                        <h:column><f:facet name="header">Hit</f:facet>#{r.hit ? 'Да' : 'Нет'}</h:column>
+                        <h:column><f:facet name="header">Time</f:facet>
+                            #{r.time.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"))}
+                        </h:column>
+                        <h:column><f:facet name="header">ms</f:facet>#{r.execTime}</h:column>
+
+                    </h:dataTable>
+                </div>
+            </section>
+
+        </h:form>
+    </main>
+
+    <script src="resources/js/script.js"></script>
+
+</h:body>
+</html>
+
+
+
+
+
+
+
+
+
+

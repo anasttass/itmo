@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Начальная страница</title>
+    <link href="css/style.css" rel="stylesheet" />
+</h:head>
+<h:body>
+<table class="maintable">
+    <!-- шапка -->
+    <tr>
+        <td colspan="2">
+            <div class="card">
+                <table class="header">
+                    <tr>
+                        <td><b>ФИО:</b></td>
+                        <td>Соснина Анастасия Владимировна</td>
+                    </tr>
+                    <tr>
+                        <td><b>Группа:</b></td>
+                        <td>P3219</td>
+                    </tr>
+                    <tr>
+                        <td><b>Вариант:</b></td>
+                        <td>3374</td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="card" style="text-align: center;">
+                <h2>Текущее время:</h2>
+                <div id="clock"></div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div class="card">
+                <p class="back-text">Чтобы перейти на основную страницу, нажмите кнопку</p>
+                <h:button value="PUSH" outcome="toMain" styleClass="back-button" />
+            </div>
+        </td>
+    </tr>
+</table>
+<script src="js/clock.js"></script>
+</h:body>
+</html>
