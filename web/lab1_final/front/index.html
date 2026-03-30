@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа 1. Web</title>
+    <style>
+        body {
+            font-family: serif;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            color: #d4fc79;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin: 2% 0;
+        }
+
+        .maintable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .maintable td {
+            vertical-align: top;
+            padding: 15px;
+        }
+
+        .header {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .header td {
+            padding: 8px;
+            font-size: 18px;
+            color: #ffcc70;
+            font-family: serif;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 2%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        form table, #memory table {
+            width: 100%;
+        }
+
+        form td, #memory td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        input[type="text"], select {
+            width: 80%;
+            padding: 5px;
+            margin: 2%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="radio"] {
+            margin: 0 1%;
+        }
+
+        button {
+            display: block;
+            font-size: 18px;
+            background-color: #50e3c2;
+            cursor: pointer;
+            font-weight: bold;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            margin: 3% auto 0 auto;
+            padding: 0 15px;
+        }
+
+        button:hover {
+            background-color: #4f8587;
+        }
+
+        #memory-title {
+            color: #70d6ff;
+            font-weight: 600;
+        }
+
+        .result-title {
+            color: #ffcc70;
+            font-weight: 600;
+        }
+
+        #result, #memory {
+            margin-top: 3%;
+            font-size: 18px;
+        }
+
+        img {
+            width: 55%;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+    </style>
+    
+</head>
+<body>
+<table class="maintable">
+    <!-- шапка -->
+    <tr>
+        <td colspan="2">
+            <div class="card">
+                <table class="header">
+                    <tr>
+                        <td><b>ФИО:</b></td>
+                        <td>Соснина Анастасия Владимировна</td>
+                    </tr>
+                    <tr>
+                        <td><b>Группа:</b></td>
+                        <td>P3219</td>
+                    </tr>
+                    <tr>
+                        <td><b>Вариант:</b></td>
+                        <td>489547</td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+
+    
+    <tr>
+        <td width="50%">
+            <div class="card">
+                <form id="data-form" action="/" method="POST">
+                    <table>
+                        <tr>
+                            <td><label for="x">Выберите X:</label></td>
+                            <td>
+                                <select id="x" name="x">
+                                    <option value="-3">-3</option>
+                                    <option value="-2">-2</option>
+                                    <option value="-1">-1</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="y">Выберите Y:</label></td>
+                            <td><input id="y" name="y" type="text" placeholder="от -3 до 5"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Выберите R:</label></td>
+                            <td>
+                                <label><input type="radio" name="r" value="1">1</label>
+                                <label><input type="radio" name="r" value="1.5">1.5</label>
+                                <label><input type="radio" name="r" value="2">2</label>
+                                <label><input type="radio" name="r" value="2.5">2.5</label>
+                                <label><input type="radio" name="r" value="3">3</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <button type="submit">ПРОВЕРИТЬ</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+               
+                <h2 class="result-title">Результат</h2>
+                <div id="result"></div>
+            </div>
+        </td>
+
+        <td width="50%" align="center">
+            <div class="card"> Координатная плоскость
+                <svg id="plane-canvas" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Области -->
+                    <g id="plane-areas" fill="rgba(0,150,255,0.3)" stroke="#70d6ff" stroke-width="1">
+                        <!-- треугольник (0,R)(R,0) -->
+                        <polygon points="256,192 320,192 256,128" />
+
+                        <!-- окружность -->
+                        <path d="M256,192 L192,192 A64,64 0 0,1 256,128 Z" />
+
+                        <!-- прямоугольник (-R,0)(0,-R/2) -->
+                        <rect x="192" y="192" width="64" height="32" />
+                    </g>
+
+                    <!-- Оси -->
+                    <g stroke="#fff" stroke-width="1">
+                        <line x1="0" y1="192" x2="512" y2="192" />
+                        <line x1="256" y1="0" x2="256" y2="384" />
+                        <text x="500" y="182" fill="#fff">x</text>
+                        <text x="264" y="12" fill="#fff">y</text>
+                    </g>
+
+                    <!-- Деления -->
+                    <g fill="#fff" font-size="12" text-anchor="middle">
+                        <text x="192" y="182">-R</text>
+                        <text x="224" y="182">-R/2</text>
+                        <text x="288" y="182">R/2</text>
+                        <text x="320" y="182">R</text>
+                        <text x="264" y="128">R</text>
+                        <text x="264" y="160">R/2</text>
+                        <text x="264" y="224">-R/2</text>
+                        <text x="264" y="256">-R</text>
+                    </g>
+
+
+                    <circle id="hit-circle" r="5" cx="-100" cy="-100" fill="#ffcc70"/>
+                </svg>
+
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="center">
+            <div class="card">
+                <h2 id="memory-title">История</h2>
+                <div id="memory"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+<script src="app.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,12 @@
+ru\stud\backend\filters\AllowFilter.class
+ru\stud\backend\model\HitChecker.class
+ru\stud\backend\model\Point.class
+ru\stud\backend\controller\ControllerServlet.class
+ru\stud\backend\filters\FullParamFilter.class
+ru\stud\backend\listener\ContextListener.class
+ru\stud\backend\service\HistoryCollector.class
+ru\stud\backend\service\HistoryService.class
+ru\stud\backend\service\RequestStats.class
+ru\stud\backend\filters\ValidationFilter.class
+ru\stud\backend\controller\AreaCheckServlet.class
+ru\stud\backend\model\ContextParams.class
