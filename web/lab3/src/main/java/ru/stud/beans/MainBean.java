@@ -8,10 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.ValidationException;
 import ru.stud.model.DtoResultHolder;
-import ru.stud.model.ResultHolder;
-import ru.stud.service.HitChecker;
 import ru.stud.service.ServiceManager;
-import ru.stud.service.Validator;
 
 import java.io.Serializable;
 import java.util.List;

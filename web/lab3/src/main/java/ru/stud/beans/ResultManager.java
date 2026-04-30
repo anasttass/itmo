@@ -4,18 +4,12 @@ package ru.stud.beans;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import ru.stud.dao.IResultRepository;
-import ru.stud.dao.JooqResultRepository;
-import ru.stud.dao.ResultRepository;
 import ru.stud.model.DtoResultHolder;
 import ru.stud.model.ResultHolder;
 import ru.stud.service.ServiceManager;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 

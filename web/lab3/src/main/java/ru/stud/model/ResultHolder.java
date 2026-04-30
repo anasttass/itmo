@@ -2,9 +2,7 @@ package ru.stud.model;
 
 import jakarta.persistence.*;
 
-import javax.annotation.processing.Generated;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

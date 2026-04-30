@@ -1,10 +1,7 @@
 package ru.stud.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Transient;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

@@ -7,6 +7,7 @@ import jakarta.xml.bind.ValidationException;
 import ru.stud.dao.IResultRepository;
 import ru.stud.model.DtoResultHolder;
 import ru.stud.model.ResultHolder;
+import ru.stud.monitoring.CounterMBean;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,8 @@ public class ServiceManager {
     private Converter converter;
     @Inject
     private IResultRepository repository;
+    @Inject
+    private MonitorManager monitorManager;
 
     private List<DtoResultHolder> resultsCache;
 
@@ -35,6 +38,10 @@ public class ServiceManager {
         }
         boolean hit = hitChecker.isHit(dto);
         dto.setHit(hit);
+
+        //MONITORING
+        monitorManager.prossesMonitoring(dto);
+
 
         ResultHolder rEntity=this.convertNormalToEntity(dto); //сначала конвертируем в сущ потом сохраняем
         repository.save(rEntity);
