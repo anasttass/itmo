@@ -5,6 +5,6 @@ projects made in uni
 >
 >[Веб](web/README.md)
 >
->[Программирование](https://github.com/anasttass/itmo/prog)
+>[Программирование](prog/README.md)
 >
->[Базы данных](https://github.com/anasttass/itmo/db)
+>[Базы данных](db)
